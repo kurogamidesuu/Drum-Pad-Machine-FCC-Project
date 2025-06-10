@@ -9,16 +9,34 @@ const App = () => {
     const [kit, setKit] = useState(true);
 
     const switchRef = useRef(switchOn);
+    const kitRef = useRef(kit);
+
+    const pads = [
+      { keyCode:'Q', kit_1:'https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3', kit_2: 'https://s3.amazonaws.com/freecodecamp/drums/Chord_1.mp3', name_1: 'Heater-1', name_2: 'Chord 1' },
+      { keyCode:'W', kit_1:'https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3', kit_2: 'https://s3.amazonaws.com/freecodecamp/drums/Chord_2.mp3', name_1: 'Heater-2', name_2: 'Chord 2' },
+      { keyCode:'E', kit_1:'https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3', kit_2: 'https://s3.amazonaws.com/freecodecamp/drums/Chord_3.mp3', name_1: 'Heater-3', name_2: 'Chord 3' },
+      { keyCode:'A', kit_1:'https://s3.amazonaws.com/freecodecamp/drums/Heater-4_1.mp3', kit_2: 'https://s3.amazonaws.com/freecodecamp/drums/Give_us_a_light.mp3', name_1: 'Heater-4', name_2: 'Shaker' },
+      { keyCode:'S', kit_1:'https://s3.amazonaws.com/freecodecamp/drums/Heater-6.mp3', kit_2: 'https://s3.amazonaws.com/freecodecamp/drums/Dry_Ohh.mp3', name_1: 'Clap', name_2: 'Open HH' },
+      { keyCode:'D', kit_1:'https://s3.amazonaws.com/freecodecamp/drums/Dsc_Oh.mp3', kit_2: 'https://s3.amazonaws.com/freecodecamp/drums/Bld_H1.mp3', name_1: 'Open HH', name_2: 'Closed HH' },
+      { keyCode:'Z', kit_1:'https://s3.amazonaws.com/freecodecamp/drums/Kick_n_Hat.mp3', kit_2: 'https://s3.amazonaws.com/freecodecamp/drums/punchy_kick_1.mp3', name_1: 'Kick n Hat', name_2: 'Punchy Kick' },
+      { keyCode:'X', kit_1:'https://s3.amazonaws.com/freecodecamp/drums/RP4_KICK_1.mp3', kit_2: 'https://s3.amazonaws.com/freecodecamp/drums/side_stick_1.mp3', name_1: 'Kick', name_2: 'Side Stick' },
+      { keyCode:'C', kit_1:'https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3', kit_2: 'https://s3.amazonaws.com/freecodecamp/drums/Brk_Snr.mp3', name_1: 'Closed HH', name_2: 'Snare' }
+    ]
 
     useEffect(() => {
       switchRef.current = switchOn;
     }, [switchOn]);
 
     useEffect(() => {
-      kit ? setDisplayText('Kit: Heater Kit') : setDisplayText('Kit: Smooth Piano Kit');
+      kitRef.current = kit;
+      if(kitRef.current) setDisplayText('Kit: Heater Kit');
+      else setDisplayText('Kit: Smooth Piano Kit');
     }, [kit]);
 
-    const handleKeyDown = (e) => {
+    
+
+    useEffect(() => {
+      const handleKeyDown = (e) => {
       const key = e.key.toUpperCase();
       const audio = document.getElementById(key);
       if(audio) {
@@ -30,7 +48,7 @@ const App = () => {
 
         const pad = pads.find((pad) => pad.keyCode === key);
         if(pad) {
-          setDisplayText(kit ? pad.name_1 : pad.name_2);
+          setDisplayText(kitRef.current ? pad.name_1 : pad.name_2);
         }
 
         setKeyPressed(true);
@@ -40,22 +58,12 @@ const App = () => {
       }
     }
 
-    useEffect(() => {
       window.addEventListener('keydown', handleKeyDown);
       setDisplayText('Kit: Heater Kit');
+      return () => window.removeEventListener('keydown', handleKeyDown)
     }, []);
 
-   const pads = [
-      { keyCode:'Q', kit_1:'https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3', kit_2: 'https://s3.amazonaws.com/freecodecamp/drums/Chord_1.mp3', name_1: 'Heater-1', name_2: 'Chord 1' },
-      { keyCode:'W', kit_1:'https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3', kit_2: 'https://s3.amazonaws.com/freecodecamp/drums/Chord_2.mp3', name_1: 'Heater-2', name_2: 'Chord 2' },
-      { keyCode:'E', kit_1:'https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3', kit_2: 'https://s3.amazonaws.com/freecodecamp/drums/Chord_3.mp3', name_1: 'Heater-3', name_2: 'Chord 3' },
-      { keyCode:'A', kit_1:'https://s3.amazonaws.com/freecodecamp/drums/Heater-4_1.mp3', kit_2: 'https://s3.amazonaws.com/freecodecamp/drums/Give_us_a_light.mp3', name_1: 'Heater-4', name_2: 'Shaker' },
-      { keyCode:'S', kit_1:'https://s3.amazonaws.com/freecodecamp/drums/Heater-6.mp3', kit_2: 'https://s3.amazonaws.com/freecodecamp/drums/Dry_Ohh.mp3', name_1: 'Clap', name_2: 'Open HH' },
-      { keyCode:'D', kit_1:'https://s3.amazonaws.com/freecodecamp/drums/Dsc_Oh.mp3', kit_2: 'https://s3.amazonaws.com/freecodecamp/drums/Bld_H1.mp3', name_1: 'Open HH', name_2: 'Closed HH' },
-      { keyCode:'Z', kit_1:'https://s3.amazonaws.com/freecodecamp/drums/Kick_n_Hat.mp3', kit_2: 'https://s3.amazonaws.com/freecodecamp/drums/punchy_kick_1.mp3', name_1: 'Kick n Hat', name_2: 'Punchy Kick' },
-      { keyCode:'X', kit_1:'https://s3.amazonaws.com/freecodecamp/drums/RP4_KICK_1.mp3', kit_2: 'https://s3.amazonaws.com/freecodecamp/drums/side_stick_1.mp3', name_1: 'Kick', name_2: 'Side Stick' },
-      { keyCode:'C', kit_1:'https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3', kit_2: 'https://s3.amazonaws.com/freecodecamp/drums/Brk_Snr.mp3', name_1: 'Closed HH', name_2: 'Snare' }
-    ]
+   
 
   return (
     <div className="bg-zinc-900 text-slate-200 h-screen w-full flex flex-col items-center justify-center" >
